@@ -13,7 +13,7 @@ RUN ./gradlew generateApolloSources --no-daemon || true
 RUN ./gradlew shadowJar --no-daemon -x test -x check -Pproduction
 
 # Copy the generated jar to a fixed, clean name
-RUN cp build/libs/*-all.jar app.jar
+RUN cp build/libs/*.jar app.jar
 
 # Run using the exec form (array syntax)
 CMD ["java", "-jar", "app.jar"]
