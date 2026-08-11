@@ -8,9 +8,9 @@ COPY . .
 # Grant execution rights
 RUN chmod +x gradlew
 
-# Generate Apollo/GraphQL sources first, then build the executable shadow JAR
+# Generate GraphQL schemas and build the fat shadow JAR
 RUN ./gradlew generateApolloSources --no-daemon || true
 RUN ./gradlew shadowJar --no-daemon -x test -x check -Pproduction
 
-# Run the compiled shadow JAR explicitly
-CMD ["sh", "-c", "java -jar build/libs/*-all.jar || java -jar build/libs/*.jar"]
+# Run the primary compiled application JAR (skipping test classes)
+CMD ["sh", "-c", "java -cp build/libs/* link.locutus.discord.Locutus"]
