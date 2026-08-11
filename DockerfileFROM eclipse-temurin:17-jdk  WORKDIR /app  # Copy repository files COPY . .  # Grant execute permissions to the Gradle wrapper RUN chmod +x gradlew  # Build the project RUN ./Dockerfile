@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
@@ -8,8 +8,8 @@ COPY . .
 # Grant execute permissions to the Gradle wrapper
 RUN chmod +x gradlew
 
-# Build the project
-RUN ./gradlew build --no-daemon -x test
+# Build the project ignoring lint/check steps
+RUN ./gradlew shadowJar --no-daemon -x test -x check
 
-# Start the bot
-CMD ["./gradlew", "run"]
+# Find the built jar and execute it
+CMD ["sh", "-c", "java -jar build/libs/*.jar"]
