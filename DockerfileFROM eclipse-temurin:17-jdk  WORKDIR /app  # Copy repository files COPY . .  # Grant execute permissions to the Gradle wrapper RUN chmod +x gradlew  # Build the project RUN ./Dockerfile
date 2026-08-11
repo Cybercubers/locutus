@@ -2,17 +2,15 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-# Copy repository files
+# Copy repo files
 COPY . .
 
-# Grant execute permissions to the Gradle wrapper
+# Grant execution rights
 RUN chmod +x gradlew
 
-# 1. Download dependencies and run the GraphQL code generator
-RUN ./gradlew generateJava --no-daemon || ./gradlew generateApolloSources --no-daemon || true
+# Generate Apollo/GraphQL sources first, then package the bot
+RUN ./gradlew generateApolloSources --no-daemon || true
+RUN ./gradlew shadowJar --no-daemon -x test -x check -Pproduction
 
-# 2. Build the project executable
-RUN ./gradlew shadowJar --no-daemon -x test -x check
-
-# Start the bot
+# Run the compiled jar file
 CMD ["sh", "-c", "java -jar build/libs/*.jar"]
