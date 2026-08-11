@@ -1,0 +1,13 @@
+app = "locutus" # Change this to your unique app name
+primary_region = "iad" # You can change this to a region close to you (e.g., "ams", "nrt", "sin")
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
