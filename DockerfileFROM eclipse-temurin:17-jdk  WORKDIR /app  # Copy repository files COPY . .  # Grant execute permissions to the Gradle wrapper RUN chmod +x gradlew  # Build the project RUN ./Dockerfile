@@ -12,5 +12,8 @@ RUN chmod +x gradlew
 RUN ./gradlew generateApolloSources --no-daemon || true
 RUN ./gradlew shadowJar --no-daemon -x test -x check -Pproduction
 
-# Run the primary compiled application JAR (skipping test classes)
-CMD ["sh", "-c", "java -cp build/libs/* link.locutus.discord.Locutus"]
+# Copy the generated jar to a fixed, clean name
+RUN cp build/libs/*-all.jar app.jar
+
+# Run using the exec form (array syntax)
+CMD ["java", "-jar", "app.jar"]
