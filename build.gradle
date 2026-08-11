@@ -736,3 +736,9 @@ tasks.named('clean', Delete) {
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
+shadowJar {
+    archiveClassifier.set('all')
+    manifest {
+        attributes 'Main-Class': 'link.locutus.discord._test_.Custom'
+    }
+}
