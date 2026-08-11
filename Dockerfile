@@ -1,15 +1,8 @@
-FROM eclipse-temurin:21-jdk
-
+FROM gradle:7.6-jdk17 AS build
+COPY . /app
 WORKDIR /app
+RUN gradle shadowJar
 
-COPY . .
-
-RUN chmod +x gradlew
-
-# Build the app using shadowJar task
-RUN ./gradlew shadowJar --no-daemon -x test -x check
-
-# Copy the generated shadow jar directly by name or pattern
-RUN cp build/libs/*-all.jar app.jar || cp build/libs/*shadow*.jar app.jar
-
-CMD ["java", "-jar", "app.jar"]
+FROM eclipse-temurin:17-jre
+COPY --from=build /app/build/libs/*-all.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
