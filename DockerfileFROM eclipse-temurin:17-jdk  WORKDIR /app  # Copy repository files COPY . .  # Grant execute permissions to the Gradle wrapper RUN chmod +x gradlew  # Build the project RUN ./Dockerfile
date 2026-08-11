@@ -8,12 +8,12 @@ COPY . .
 # Grant execution rights
 RUN chmod +x gradlew
 
-# Generate GraphQL schemas and build the fat shadow JAR
+# Build the fat shadow JAR
 RUN ./gradlew generateApolloSources --no-daemon || true
 RUN ./gradlew shadowJar --no-daemon -x test -x check -Pproduction
 
-# Copy the generated jar to a fixed, clean name
-RUN cp build/libs/*.jar app.jar
+# Copy ONLY the shadow/fat JAR (ignoring the plain thin JAR)
+RUN cp $(find build/libs -name "*-all.jar" -o -name "*shadow*.jar" | head -n 1) app.jar
 
-# Run using the exec form (array syntax)
+# Run using the exec form
 CMD ["java", "-jar", "app.jar"]
