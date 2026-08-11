@@ -739,6 +739,6 @@ tasks.withType(Test).configureEach {
 shadowJar {
     archiveClassifier.set('all')
     manifest {
-        attributes 'Main-Class': 'link.locutus.discord._test_.Custom'
+        attributes 'Main-Class': 'link.locutus.Locutus'
     }
 }
